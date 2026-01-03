@@ -23,7 +23,7 @@ A powerful clipboard manager for macOS, inspired by Windows' Win+V clipboard his
 
 ### Download Release (Recommended)
 
-**[Download Kliply v1.0.0](https://github.com/Digital-Defiance/Kliply/releases/tag/v1.0.0)**
+**[Download Kliply v1.0.1](https://github.com/Digital-Defiance/Kliply/releases/tag/v1.0.1)**
 
 The release includes a signed and notarized DMG for easy installation:
 

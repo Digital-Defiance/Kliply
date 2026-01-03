@@ -7,13 +7,13 @@
     <key>CFBundleExecutable</key>
     <string>Kliply</string>
     <key>CFBundleIdentifier</key>
-    <string>com.kliply.app</string>
+    <string>com.kliply</string>
     <key>CFBundleName</key>
     <string>Kliply</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0.0</string>
+    <string>1.0.1</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>CFBundleIconFile</key>
@@ -22,6 +22,8 @@
     <string>14.0</string>
     <key>LSUIElement</key>
     <true/>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.utilities</string>
     <key>NSHumanReadableCopyright</key>
     <string>Copyright © 2026 Kliply Contributors. All rights reserved.</string>
     <key>NSAppleEventsUsageDescription</key>

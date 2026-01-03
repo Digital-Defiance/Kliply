@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { Link } from "react-router-dom";
 import {
   FaGithub,
   FaHeart,
@@ -166,6 +167,8 @@ const About = () => {
             >
               MIT License
             </a>
+            {" • "}
+            <Link to="/privacy">Privacy Policy</Link>
             {" • "}
             <a
               href="https://github.com/Digital-Defiance/Kliply"

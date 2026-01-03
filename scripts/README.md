@@ -2,18 +2,43 @@
 
 This directory contains scripts to build, sign, notarize, and package Kliply for distribution.
 
+## Distribution Methods
+
+### Direct Distribution (DMG)
+For distributing outside the Mac App Store via your website, GitHub, etc.
+- Uses Developer ID certificates
+- Requires notarization
+- Creates a `.dmg` installer
+
+### Mac App Store
+For distributing through the Mac App Store.
+- Uses 3rd Party Mac Developer certificates
+- Requires provisioning profile
+- Creates a `.pkg` for upload to App Store Connect
+
 ## Prerequisites
 
 ### 1. Apple Developer Account
 - Enroll at https://developer.apple.com/programs/
 - Cost: $99/year
 
-### 2. Developer ID Certificate
+### 2. Certificates
+
+#### For Direct Distribution (DMG):
 1. Go to https://developer.apple.com/account/resources/certificates/list
 2. Click "+" to create a new certificate
 3. Select "Developer ID Application"
 4. Upload Certificate Signing Request (or create one with Keychain Access)
 5. Download and install the certificate
+
+#### For Mac App Store:
+1. Create "Mac App Distribution" certificate (3rd Party Mac Developer Application)
+2. Create "Mac Installer Distribution" certificate (3rd Party Mac Developer Installer)
+3. Create a Mac App Store provisioning profile:
+   - Go to https://developer.apple.com/account/resources/profiles/list
+   - Click "+" and select "Mac App Store Connect"
+   - Select your App ID and certificate
+   - Download and double-click to install
 
 ### 3. App-Specific Password (for notarization)
 1. Go to https://appleid.apple.com/account/manage
@@ -25,6 +50,7 @@ This directory contains scripts to build, sign, notarize, and package Kliply for
 ```bash
 export APPLE_ID="your@email.com"
 export APPLE_TEAM_ID="XXXXXXXXXX"  # Find at developer.apple.com/account
+export TEAM_ID="XXXXXXXXXX"        # Same as APPLE_TEAM_ID (for App Store builds)
 ```
 
 ### 5. Store Notarization Credentials
@@ -37,7 +63,7 @@ xcrun notarytool store-credentials "AC_PASSWORD" \
 
 ## Quick Start
 
-### Option 1: Build Everything (Recommended)
+### Option 1: Build Everything for Direct Distribution
 ```bash
 chmod +x scripts/*.sh
 ./scripts/build-all.sh
@@ -45,7 +71,15 @@ chmod +x scripts/*.sh
 
 This runs all steps automatically and creates `build/Kliply.dmg`.
 
-### Option 2: Step by Step
+### Option 2: Build for Mac App Store
+```bash
+export TEAM_ID="YOUR_TEAM_ID"
+./scripts/5-build-for-app-store.sh
+```
+
+Creates `build/export/Kliply.pkg` for upload to App Store Connect.
+
+### Option 3: Step by Step (Direct Distribution)
 
 #### Step 1: Build the App
 ```bash
@@ -97,11 +131,31 @@ Creates `build/Kliply.dmg` installer
 - Customizes appearance
 - Compresses and signs DMG
 
+### 5-build-for-app-store.sh
+- Uses Xcode project (Kliply.xcodeproj) for proper App Store metadata
+- Archives with xcodebuild
+- Signs with 3rd Party Mac Developer certificates
+- Exports signed .pkg for App Store Connect
+- Ready for upload via Transporter app
+
 ## Troubleshooting
 
 ### "No Developer ID certificate found"
 - Install certificate from developer.apple.com/account
 - Check it's in Keychain Access under "My Certificates"
+
+### "errSecInternalComponent" or "unable to build chain to self-signed root"
+This means your certificate has incorrect trust settings. Fix it by:
+1. Open Keychain Access
+2. Find your certificate under "My Certificates"
+3. Double-click it → Trust → set to "Use System Defaults"
+4. Or run: `security find-certificate -c "YOUR_CERT_NAME" -p ~/Library/Keychains/login.keychain-db > /tmp/cert.pem && security remove-trusted-cert /tmp/cert.pem`
+
+You may also need to install Apple's intermediate certificates:
+```bash
+curl -sO https://www.apple.com/certificateauthority/DeveloperIDG2CA.cer
+sudo security import DeveloperIDG2CA.cer -k /Library/Keychains/System.keychain
+```
 
 ### "App-specific password not found"
 - Run the `xcrun notarytool store-credentials` command above

@@ -37,22 +37,23 @@ class ClipboardMonitor {
     }
     
     func readClipboardContent() -> ClipboardContent? {
-        // Check for file URLs first
-        if let fileURLs = pasteboard.readObjects(forClasses: [NSURL.self], options: nil) as? [URL],
-           !fileURLs.isEmpty {
-            return .fileURLs(fileURLs)
-        }
-        
-        // Check for images
+        // Check for images first
         if let image = NSImage(pasteboard: pasteboard) {
             return .image(image)
         }
         
-        // Check for URLs
+        // Check for URLs (http/https)
         if let urlString = pasteboard.string(forType: .string),
            let url = URL(string: urlString),
            (url.scheme == "http" || url.scheme == "https") {
             return .url(url, title: nil) // Title will be fetched later if needed
+        }
+        
+        // Check for file URLs
+        if let fileURLs = pasteboard.readObjects(forClasses: [NSURL.self], options: nil) as? [URL],
+           !fileURLs.isEmpty,
+           fileURLs.allSatisfy({ $0.isFileURL }) {
+            return .fileURLs(fileURLs)
         }
         
         // Check for rich text

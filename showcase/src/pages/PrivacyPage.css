@@ -1,0 +1,53 @@
+.privacy-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+}
+
+.privacy-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem 2rem;
+  background: rgba(15, 15, 35, 0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.back-link:hover {
+  color: var(--secondary-color);
+  background: rgba(59, 130, 246, 0.1);
+  transform: translateX(-5px);
+}
+
+.privacy-page .privacy {
+  padding-top: 8rem;
+}
+
+@media (max-width: 768px) {
+  .privacy-nav {
+    padding: 1rem;
+  }
+
+  .back-link {
+    font-size: 0.9rem;
+  }
+
+  .privacy-page .privacy {
+    padding-top: 6rem;
+  }
+}
