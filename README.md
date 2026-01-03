@@ -21,7 +21,19 @@ A powerful clipboard manager for macOS, inspired by Windows' Win+V clipboard his
 
 ## Installation
 
-### From Source
+### Download Release (Recommended)
+
+**[Download Kliply v1.0.0](https://github.com/Digital-Defiance/Kliply/releases/tag/v1.0.0)**
+
+The release includes a signed and notarized DMG for easy installation:
+
+1. Download `Kliply.dmg` from the GitHub release
+2. Open the DMG and drag Kliply to your Applications folder
+3. Launch Kliply and grant accessibility permissions
+
+**App Store release coming soon!**
+
+### From Source (For Adventurous Developers)
 
 1. Clone the repository:
 ```bash
