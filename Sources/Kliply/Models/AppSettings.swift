@@ -27,7 +27,23 @@ class AppSettings {
     var showPreviewImages: Bool = true
     var maxImagePreviewHeight: CGFloat = 200
     
-    private init() {}
+    // Startup settings
+    var launchAtLogin: Bool = true {
+        didSet {
+            if launchAtLogin != oldValue {
+                Task { @MainActor in
+                    await LoginItemManager.shared.setLaunchAtLogin(launchAtLogin)
+                }
+            }
+        }
+    }
+    
+    private init() {
+        // Check initial login item status
+        Task { @MainActor in
+            self.launchAtLogin = await LoginItemManager.shared.isEnabled()
+        }
+    }
     
     var hotkeyDescription: String {
         var modifiers: [String] = []

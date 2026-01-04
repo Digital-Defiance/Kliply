@@ -56,6 +56,19 @@ struct GeneralSettingsView: View {
             }
             
             Section {
+                Toggle("Launch at login", isOn: Binding(
+                    get: { settings.launchAtLogin },
+                    set: { settings.launchAtLogin = $0 }
+                ))
+                
+                Text("Automatically start Kliply when you log in")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } header: {
+                Text("Startup")
+            }
+            
+            Section {
                 Toggle("Always paste as plain text", isOn: Binding(
                     get: { settings.alwaysPastePlainText },
                     set: { settings.alwaysPastePlainText = $0 }
@@ -140,7 +153,7 @@ struct AboutView: View {
                 .font(.title)
                 .fontWeight(.bold)
             
-            Text("Version 1.0.1")
+            Text("Version 1.0.3")
                 .foregroundStyle(.secondary)
             
             Divider()

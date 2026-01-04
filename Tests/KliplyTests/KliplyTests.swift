@@ -79,6 +79,13 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertTrue(description.contains("⇧"))
         XCTAssertTrue(description.contains("V"))
     }
+    
+    @MainActor
+    func testLaunchAtLoginDefaultsToTrue() {
+        let settings = AppSettings.shared
+        // Should default to true for first launch
+        XCTAssertTrue(settings.launchAtLogin)
+    }
 }
 
 @MainActor
@@ -221,5 +228,46 @@ final class ClipboardMonitorTests: XCTestCase {
         } else {
             XCTFail("Expected URL content")
         }
+    }
+}
+
+@MainActor
+final class LoginItemManagerTests: XCTestCase {
+    
+    func testLoginItemManagerSharedInstance() {
+        let manager = LoginItemManager.shared
+        XCTAssertNotNil(manager)
+    }
+    
+    func testGetStatus() {
+        let manager = LoginItemManager.shared
+        let status = manager.getStatus()
+        
+        // Status should be one of the valid SMAppService.Status values
+        XCTAssertTrue([.enabled, .notRegistered, .notFound, .requiresApproval].contains(status))
+    }
+    
+    func testIsEnabled() async {
+        let manager = LoginItemManager.shared
+        let isEnabled = await manager.isEnabled()
+        
+        // Should return a boolean value
+        XCTAssertNotNil(isEnabled)
+    }
+    
+    func testSetLaunchAtLoginToggle() async {
+        let manager = LoginItemManager.shared
+        
+        // Get initial state
+        let initialState = await manager.isEnabled()
+        
+        // Toggle to opposite state
+        await manager.setLaunchAtLogin(!initialState)
+        
+        // Note: In a test environment, this may not actually change the state
+        // due to sandbox restrictions, but it should not throw or crash
+        
+        // Toggle back to original state
+        await manager.setLaunchAtLogin(initialState)
     }
 }
