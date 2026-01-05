@@ -64,7 +64,7 @@ const Hero = ({ scrollY }: HeroProps) => {
           Built with Swift & SwiftUI for macOS 13.0+. Privacy-focused with in-memory storage.
           <br />
           <span className="hero-highlight">
-            📋 Smart Tracking • 🔍 Instant Search • ⌨️ Keyboard First • 🎨 Rich Previews • 🔒 Privacy-Focused
+            📋 Smart Tracking • 🔍 Instant Search • ⌨️ Keyboard First • 🛡️ Smart Exclusions • 🔒 Privacy-Focused
           </span>
         </motion.p>
 

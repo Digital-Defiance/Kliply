@@ -163,6 +163,26 @@ const features: Feature[] = [
     ],
   },
   {
+    title: "Smart App Exclusions",
+    icon: "🛡️",
+    description:
+      "Auto-detect and exclude password managers and sensitive apps from clipboard monitoring. Keep your passwords, authentication codes, and banking info completely private.",
+    tech: [
+      "App Detection",
+      "NSWorkspace",
+      "Bundle ID Matching",
+      "User Preferences",
+    ],
+    category: "Privacy",
+    highlights: [
+      "Auto-detect 1Password, LastPass, Dashlane, Bitwarden, and more",
+      "Exclude browsers, authenticators, and dev tools",
+      "Manually add apps by name or bundle ID",
+      "Clipboard changes from excluded apps never recorded",
+      "Persistent exclusion list across app restarts",
+    ],
+  },
+  {
     title: "Privacy-Focused Design",
     icon: "🔒",
     description:
