@@ -13,7 +13,7 @@ struct PopupWindow: View {
                     Text("Clipboard History")
                         .font(.headline)
                     Spacer()
-                    Button(action: { appState.isPopupVisible = false }) {
+                    Button(action: { appState.closePopup() }) {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundStyle(.secondary)
                             .font(.title3)
@@ -111,14 +111,38 @@ struct PopupWindow: View {
         .frame(width: 600, height: 500)
         .background(Color(nsColor: .windowBackgroundColor))
         .focusable()
+        .onKeyPress(.upArrow) {
+            if !appState.filteredHistory.isEmpty {
+                appState.selectedItemIndex = max(0, appState.selectedItemIndex - 1)
+            }
+            return .handled
+        }
+        .onKeyPress(.downArrow) {
+            if !appState.filteredHistory.isEmpty {
+                appState.selectedItemIndex = min(appState.filteredHistory.count - 1, appState.selectedItemIndex + 1)
+            }
+            return .handled
+        }
+        .onKeyPress(.return) {
+            if !appState.filteredHistory.isEmpty {
+                appState.selectItem(at: appState.selectedItemIndex)
+            }
+            return .handled
+        }
         .onKeyPress(.escape) {
-            appState.isPopupVisible = false
+            appState.closePopup()
+            return .handled
+        }
+        .onKeyPress(.tab) {
+            let allFilters = ContentFilter.allCases
+            if let currentIndex = allFilters.firstIndex(of: appState.selectedFilter) {
+                let nextIndex = (currentIndex + 1) % allFilters.count
+                appState.selectedFilter = allFilters[nextIndex]
+            }
             return .handled
         }
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                isSearchFocused = true
-            }
+            // Let keyboard navigation work immediately without focusing search
         }
     }
 }

@@ -28,6 +28,8 @@ A macOS clone of Win+V clipboard utility written in SwiftUI.
 - Trigger: User presses hotkey (Cmd+Shift+V by default)
 - Position: Center of screen
 - Size: Dynamically sized based on screen, large enough to show ~10 items
+- **Immediate keyboard focus**: When popup appears, it captures keyboard focus so arrow keys and Enter work immediately without clicking
+- First item in history is pre-selected by default
 - Displays clipboard history with visual previews
 - Search/filter bar to quickly find items
 - Category/type filters (Text, Images, URLs, Files, etc.)
@@ -43,9 +45,10 @@ A macOS clone of Win+V clipboard utility written in SwiftUI.
 - Track current app/UI focus before popup appears
 - On selection:
   1. Place selected item on clipboard
-  2. Re-activate previously focused app/UI element
-  3. Paste into that element
-  4. Choose rich text or plain text as appropriate (TBD: research what other clipboard apps do)
+  2. Move selected item to top of history (if "Move selected pastes to top" setting is enabled)
+  3. Re-activate previously focused app/UI element
+  4. Paste into that element
+  5. Choose rich text or plain text as appropriate (TBD: research what other clipboard apps do)
 
 ### History Management
 - Clear all history (button in popup or menu)
@@ -58,6 +61,7 @@ Accessible via Menu Bar icon:
 
 - History depth (default: 10)
 - Hotkey customization
+- Move selected pastes to top (default: true) - when enabled, pasting an item from history moves it to the top
 - Plain text preference (TBD: research standard behavior)
 - Dark mode support (respect system appearance settings)
 - High contrast mode (if easy to implement)

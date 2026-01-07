@@ -22,6 +22,14 @@ A powerful clipboard manager for macOS, inspired by Windows' Win+V clipboard his
 
 ## Changelog
 
+- **v1.0.8**
+  - **App Store Ready**: Full sandbox compatibility with Services-based keyboard shortcut
+  - Added "Move selected pastes to top" setting (default: true) - selected items move to top of history
+  - Services integration for global hotkey in sandboxed environments
+  - Improved Settings UI with one-time shortcut setup instructions for App Store version
+  - Fixed entitlements for App Store submission (removed rejected temporary exceptions)
+  - Sandbox detection with graceful feature adaptation
+
 - **v1.0.7**
   - Settings window now floats above other apps/spaces (including fullscreen) for reliable access
   - Improved Exclusions tab: auto-detects password managers/sensitive apps and keeps them out of history
@@ -55,7 +63,7 @@ A powerful clipboard manager for macOS, inspired by Windows' Win+V clipboard his
 
 ### Download Release (Recommended)
 
-**[Download Kliply v1.0.7](https://github.com/Digital-Defiance/Kliply/releases/tag/v1.0.7)**
+**[Download Kliply v1.0.8](https://github.com/Digital-Defiance/Kliply/releases/tag/v1.0.8)**
 
 The release includes a signed and notarized DMG for easy installation:
 
@@ -63,7 +71,7 @@ The release includes a signed and notarized DMG for easy installation:
 2. Open the DMG and drag Kliply to your Applications folder
 3. Launch Kliply and grant accessibility permissions
 
-**App Store release coming soon!**
+**🎉 Now available on the Mac App Store!** (Pending approval)
 
 ### From Source (For Adventurous Developers)
 
@@ -81,12 +89,19 @@ swift run
 
 ### First Launch
 
+**Direct Download Version:**
 On first launch, Kliply will request accessibility permissions:
-
 1. Grant permission when prompted
 2. Go to **System Settings > Privacy & Security > Accessibility**
 3. Enable Kliply
 4. The app will automatically activate
+
+**App Store Version:**
+Set up your keyboard shortcut (one-time):
+1. Open **System Settings > Keyboard > Keyboard Shortcuts**
+2. Select **Services > General**
+3. Find **Show Kliply Clipboard** and assign your shortcut (recommended: Cmd+Shift+V)
+4. Use your shortcut from any app to access clipboard history
 
 ## Usage
 
@@ -97,9 +112,12 @@ On first launch, Kliply will request accessibility permissions:
 3. **Press Cmd+Shift+V** - Opens the clipboard history popup
 4. **Select an item**:
    - Use arrow keys to navigate
-   - Press Enter to paste
-   - Press Shift+Enter to paste as plain text
-   - Press Esc to close without pasting
+   - Press Enter to select
+   - Press Esc to close without selecting
+
+**Paste Behavior:**
+- **Direct Download version**: Auto-pastes directly into your app (requires accessibility permissions)
+- **App Store version**: Copies selection to clipboard, then press **⌘V** to paste
 
 ### Keyboard Shortcuts
 
@@ -107,8 +125,8 @@ On first launch, Kliply will request accessibility permissions:
 |----------|--------|
 | `Cmd+Shift+V` | Open/close popup |
 | `↑` / `↓` | Navigate items |
-| `Enter` | Select and paste |
-| `Shift+Enter` | Paste as plain text |
+| `Enter` | Select item (auto-paste on Direct Download, copy to clipboard on App Store) |
+| `Shift+Enter` | Select as plain text |
 | `Tab` | Cycle through filters |
 | `Delete` | Remove selected item |
 | `Esc` | Close popup |
@@ -124,7 +142,8 @@ On first launch, Kliply will request accessibility permissions:
 Access settings via the menu bar icon:
 
 - **History Depth**: Number of items to keep (default: 10)
-- **Hotkey**: Customize the global keyboard shortcut
+- **Hotkey**: Customize the global keyboard shortcut (or set up Services shortcut for App Store version)
+- **Move selected pastes to top**: When enabled (default), pasted items move to the top of history
 - **Paste Behavior**: Always paste as plain text option
 - **Preview Options**: Toggle image previews
 - **Exclusions**: Manage apps to exclude from clipboard monitoring
@@ -178,8 +197,8 @@ swift run
 
 ## Roadmap
 
-- [ ] App Store submission
-- [ ] Launch at login option
+- [x] App Store submission - ✅ Submitted!
+- [x] Launch at login option - ✅ Implemented!
 - [ ] Automatic updates via Sparkle
 - [x] App exclude list (ignore clipboard from certain apps) - ✅ Implemented!
 - [ ] Enhanced VoiceOver support
@@ -203,8 +222,8 @@ Contributions are welcome! Please:
 ## Troubleshooting
 
 **Hotkey doesn't work?**
-- Verify accessibility permissions in System Settings
-- Restart Kliply after granting permissions
+- **Direct Download**: Verify accessibility permissions in System Settings, restart Kliply after granting
+- **App Store Version**: Set up shortcut in System Settings > Keyboard > Keyboard Shortcuts > Services > General > Show Kliply Clipboard
 
 **Items not appearing in history?**
 - Check that the app is running (icon in menu bar)

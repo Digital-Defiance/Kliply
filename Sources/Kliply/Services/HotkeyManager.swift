@@ -17,11 +17,6 @@ class HotkeyManager {
         // Unregister existing hotkey first
         unregisterHotkey()
         
-        // Check for accessibility permissions
-        guard checkAccessibilityPermissions() else {
-            return false
-        }
-        
         // Install event handler
         var eventType = EventTypeSpec(eventClass: OSType(kEventClassKeyboard), eventKind: UInt32(kEventHotKeyPressed))
         let status = InstallEventHandler(

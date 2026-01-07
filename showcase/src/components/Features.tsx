@@ -27,20 +27,20 @@ const features: Feature[] = [
     title: "Global Hotkey Access",
     icon: "🔥",
     description:
-      "Instant access to your clipboard history with Cmd+Shift+V from anywhere in macOS. Customizable hotkey integration using Carbon API with accessibility permissions.",
+      "Instant access to your clipboard history with Cmd+Shift+V from anywhere in macOS. App Store version uses Services integration for sandbox-compatible shortcuts.",
     tech: [
       "Carbon API",
-      "Global Hotkeys",
-      "Accessibility",
-      "Event Handler",
+      "Services Menu",
+      "Keyboard Shortcuts",
+      "Sandbox Compatible",
     ],
     category: "Core",
     highlights: [
       "System-wide hotkey (Cmd+Shift+V by default)",
       "Works across all applications",
       "Customizable keyboard shortcut",
-      "Requires accessibility permissions for security",
-      "Instant popup activation from any context",
+      "App Store: Uses macOS Services for sandbox compatibility",
+      "One-time setup in System Settings",
     ],
   },
   {
@@ -146,20 +146,20 @@ const features: Feature[] = [
     title: "Smart Paste",
     icon: "🎯",
     description:
-      "Automatically returns focus to your previous application and pastes the selected content. Tracks window focus changes to ensure paste goes to the right place.",
+      "Automatically returns focus to your previous application and pastes the selected content. Optional move-to-top keeps frequently used items easily accessible.",
     tech: [
       "NSWorkspace",
       "App Tracking",
-      "AppleScript",
+      "History Reordering",
       "Focus Management",
     ],
     category: "Productivity",
     highlights: [
       "Remembers your previous application",
       "Automatically switches focus back",
-      "Simulates paste with Cmd+V",
+      "Move selected pastes to top (configurable)",
       "Updates target when you click elsewhere",
-      "Prevents multiple simultaneous pastes",
+      "App Store: Copies to clipboard for Cmd+V paste",
     ],
   },
   {
@@ -240,6 +240,26 @@ const features: Feature[] = [
       "SwiftUI for native interface",
       "Universal binary (Apple Silicon + Intel)",
       "Code signed and notarized for security",
+    ],
+  },
+  {
+    title: "App Store Ready",
+    icon: "🍎",
+    description:
+      "Available on the Mac App Store with full sandbox compliance. Uses macOS Services for keyboard shortcuts, ensuring security while maintaining full functionality.",
+    tech: [
+      "App Sandbox",
+      "Services Menu",
+      "Notarization",
+      "Privacy Compliant",
+    ],
+    category: "Core",
+    highlights: [
+      "Full Mac App Store sandbox compliance",
+      "Services-based keyboard shortcut integration",
+      "One-time shortcut setup in System Settings",
+      "Privacy manifest for clipboard access",
+      "Also available as direct download (non-sandboxed)",
     ],
   },
 ];

@@ -10,3 +10,7 @@ DerivedData/
 .netrc
 *.cer
 *.certSigningRequest
+
+
+#Ignore vscode AI rules
+.github/instructions/codacy.instructions.md

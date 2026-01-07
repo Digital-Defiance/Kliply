@@ -22,6 +22,7 @@ class AppSettings {
     
     // Paste behavior
     var alwaysPastePlainText: Bool = false
+    var moveSelectedPastesToTop: Bool = true
     
     // UI settings
     var showPreviewImages: Bool = true
@@ -117,7 +118,7 @@ class AppSettings {
             
             // Try bundle ID lookup first
             for bundleId in appGroup.bundleIds {
-                if let _ = workspace.absolutePathForApplication(withBundleIdentifier: bundleId) {
+                if workspace.urlForApplication(withBundleIdentifier: bundleId) != nil {
                     detected.append(appGroup.displayName)
                     found = true
                     break

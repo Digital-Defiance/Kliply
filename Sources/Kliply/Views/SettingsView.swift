@@ -1,5 +1,6 @@
 import SwiftUI
 import AppKit
+import Carbon.HIToolbox
 
 struct SettingsView: View {
     @Environment(AppSettings.self) private var settings
@@ -57,12 +58,19 @@ struct SettingsView: View {
             forName: NSWindow.didBecomeKeyNotification,
             object: nil,
             queue: .main
-        ) { [self] notification in
+        ) { notification in
             guard let window = notification.object as? NSWindow else { return }
             
             // Check if this is a Settings window
-            if window.title.contains("Settings") || window.isKeyWindow {
-                self.bringWindowToFront()
+            Task { @MainActor in
+                if window.title.contains("Settings") || window.isKeyWindow {
+                    // Bring the window to front
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        NSApp.activate(ignoringOtherApps: true)
+                        window.makeKeyAndOrderFront(nil)
+                        window.level = .floating
+                    }
+                }
             }
         }
     }
@@ -123,6 +131,15 @@ struct GeneralSettingsView: View {
                     set: { settings.alwaysPastePlainText = $0 }
                 ))
                 
+                Toggle("Move selected pastes to top", isOn: Binding(
+                    get: { settings.moveSelectedPastesToTop },
+                    set: { settings.moveSelectedPastesToTop = $0 }
+                ))
+                
+                Text("When enabled, pasting an item moves it to the top of the history")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                
                 Toggle("Show image previews", isOn: Binding(
                     get: { settings.showPreviewImages },
                     set: { settings.showPreviewImages = $0 }
@@ -139,55 +156,238 @@ struct GeneralSettingsView: View {
 struct HotkeySettingsView: View {
     @Environment(AppSettings.self) private var settings
     @State private var isRecording = false
+    @State private var localMonitor: Any?
+    @State private var didCapture = false
+    
+    /// Whether the app is running in sandbox mode
+    private var isSandboxed: Bool {
+        ProcessInfo.processInfo.environment["APP_SANDBOX_CONTAINER_ID"] != nil
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             Text("Global Hotkey")
                 .font(.headline)
             
-            HStack {
-                Text("Current Hotkey:")
-                
-                Text(settings.hotkeyDescription)
-                    .font(.system(.body, design: .monospaced))
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(Color(nsColor: .controlBackgroundColor))
-                    .cornerRadius(6)
-                
-                Spacer()
-                
-                Button(isRecording ? "Recording..." : "Change") {
-                    isRecording.toggle()
-                }
-            }
-            
-            if isRecording {
-                Text("Press your desired key combination...")
+            if isSandboxed {
+                // Sandbox mode - show Services setup instructions
+                VStack(alignment: .leading, spacing: 16) {
+                    HStack {
+                        Image(systemName: "info.circle.fill")
+                            .foregroundStyle(.blue)
+                        Text("App Store Version")
+                            .font(.headline)
+                    }
+                    
+                    Text("Set up a global keyboard shortcut in System Settings:")
+                        .font(.callout)
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Label("Open **System Settings**", systemImage: "1.circle.fill")
+                        Label("Go to **Keyboard** → **Keyboard Shortcuts**", systemImage: "2.circle.fill")
+                        Label("Select **Services** → **General**", systemImage: "3.circle.fill")
+                        Label("Find **Show Kliply Clipboard**, click **none**", systemImage: "4.circle.fill")
+                        Label("Press **⌘⇧V** (Cmd+Shift+V) to assign", systemImage: "5.circle.fill")
+                    }
                     .font(.callout)
+                    
+                    Button("Open Keyboard Settings") {
+                        openKeyboardSettings()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .padding(.top, 8)
+                    
+                    Divider()
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Image(systemName: "doc.on.clipboard")
+                                .foregroundStyle(.orange)
+                            Text("How to Use")
+                                .font(.subheadline.bold())
+                        }
+                        
+                        Text("1. Press your shortcut to open clipboard history")
+                        Text("2. Use ↑↓ arrows to select an item")
+                        Text("3. Press Enter to copy to clipboard")
+                        Text("4. Press ⌘V to paste into your app")
+                    }
+                    .font(.caption)
                     .foregroundStyle(.secondary)
+                    
+                    Text("Note: The App Store version copies your selection to the clipboard. Press ⌘V to paste.")
+                        .font(.caption)
+                        .foregroundStyle(.orange)
+                        .padding(.top, 4)
+                }
+                .padding()
+                .background(Color(nsColor: .controlBackgroundColor))
+                .cornerRadius(8)
+            } else {
+                // Non-sandbox mode - show traditional hotkey settings
+                HStack {
+                    Text("Current Hotkey:")
+                    
+                    Text(settings.hotkeyDescription)
+                        .font(.system(.body, design: .monospaced))
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color(nsColor: .controlBackgroundColor))
+                        .cornerRadius(6)
+                    
+                    Spacer()
+                    
+                    Button(isRecording ? "Press keys..." : "Change") {
+                        if isRecording {
+                            stopRecording()
+                        } else {
+                            startRecording()
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(isRecording ? .orange : .accentColor)
+                    
+                    if isRecording {
+                        Button("Cancel") {
+                            stopRecording()
+                        }
+                        .buttonStyle(.bordered)
+                    }
+                }
+                
+                if isRecording {
+                    HStack {
+                        Image(systemName: "keyboard")
+                            .foregroundStyle(.orange)
+                        Text("Press your desired key combination (e.g., ⌘⇧V)...")
+                            .font(.callout)
+                    }
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color.accentColor.opacity(0.1))
+                    .background(Color.orange.opacity(0.1))
                     .cornerRadius(8)
-            }
-            
-            Divider()
-            
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Tips:")
-                    .font(.headline)
+                }
                 
-                Text("• The hotkey works system-wide when Kliply is running")
-                Text("• Recommended modifiers: ⌘ (Command) or ⇧ (Shift)")
-                Text("• Avoid conflicting with common system shortcuts")
+                Divider()
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Tips:")
+                        .font(.headline)
+                    
+                    Text("• The hotkey works system-wide when Kliply is running")
+                    Text("• Must include at least one modifier (⌘, ⌥, ⌃, or ⇧)")
+                    Text("• Avoid conflicting with common system shortcuts")
+                    Text("• Default: ⌘⇧V (Cmd+Shift+V)")
+                }
+                .font(.callout)
+                .foregroundStyle(.secondary)
+                
+                Button("Reset to Default (⌘⇧V)") {
+                    resetToDefault()
+                }
+                .buttonStyle(.bordered)
+                .padding(.top, 8)
             }
-            .font(.callout)
-            .foregroundStyle(.secondary)
             
             Spacer()
         }
         .padding()
+        .onDisappear {
+            stopRecording()
+        }
+    }
+    
+    private func startRecording() {
+        isRecording = true
+        didCapture = false
+        // Suspend existing global hotkey to prevent it from firing during capture
+        Task { @MainActor in
+            AppState.shared.suspendHotkey()
+        }
+        
+        // Start local event monitor for key presses
+        localMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            handleKeyEvent(event)
+            return nil // Consume the event
+        }
+    }
+    
+    private func stopRecording() {
+        isRecording = false
+        
+        if let monitor = localMonitor {
+            NSEvent.removeMonitor(monitor)
+            localMonitor = nil
+        }
+        // If no capture occurred, restore the previous hotkey
+        Task { @MainActor in
+            if !didCapture {
+                AppState.shared.resumeHotkey()
+            }
+            didCapture = false
+        }
+    }
+    
+    private func handleKeyEvent(_ event: NSEvent) {
+        // Get normalized modifiers
+        let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        // Must include at least one modifier
+        guard hasRequiredModifiers(modifiers) else { return }
+        
+        // Ignore if only modifier keys are pressed (no actual key)
+        let keyCode = event.keyCode
+        guard !isOnlyModifierKey(keyCode) else { return }
+        
+        // Convert to Carbon modifiers and update settings
+        let carbonModifiers = toCarbonModifiers(modifiers)
+        settings.hotkeyKeyCode = UInt32(keyCode)
+        settings.hotkeyModifiers = carbonModifiers
+        
+        // Re-register the hotkey
+        Task { @MainActor in
+            didCapture = true
+            AppState.shared.updateHotkey()
+        }
+        
+        stopRecording()
+    }
+    
+    // MARK: - Hotkey helpers
+    private func hasRequiredModifiers(_ modifiers: NSEvent.ModifierFlags) -> Bool {
+        return modifiers.contains(.command)
+            || modifiers.contains(.option)
+            || modifiers.contains(.control)
+            || modifiers.contains(.shift)
+    }
+    
+    private func isOnlyModifierKey(_ keyCode: UInt16) -> Bool {
+        // Common modifier-only key codes
+        let modifierKeyCodes: Set<UInt16> = [54, 55, 56, 57, 58, 59, 60, 61, 62, 63]
+        return modifierKeyCodes.contains(keyCode)
+    }
+    
+    private func toCarbonModifiers(_ flags: NSEvent.ModifierFlags) -> UInt32 {
+        var result: UInt32 = 0
+        if flags.contains(.command) { result |= UInt32(cmdKey) }
+        if flags.contains(.option) { result |= UInt32(optionKey) }
+        if flags.contains(.control) { result |= UInt32(controlKey) }
+        if flags.contains(.shift) { result |= UInt32(shiftKey) }
+        return result
+    }
+    
+    private func resetToDefault() {
+        settings.hotkeyKeyCode = UInt32(kVK_ANSI_V)
+        settings.hotkeyModifiers = UInt32(cmdKey | shiftKey)
+        
+        Task { @MainActor in
+            AppState.shared.updateHotkey()
+        }
+    }
+    
+    private func openKeyboardSettings() {
+        if let url = URL(string: "x-apple.systempreferences:com.apple.Keyboard-Settings.extension") {
+            NSWorkspace.shared.open(url)
+        }
     }
 }
 

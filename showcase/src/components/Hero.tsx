@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { FaGithub } from "react-icons/fa";
+import { FaGithub, FaBook } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import "./Hero.css";
 
 interface HeroProps {
@@ -75,12 +76,12 @@ const Hero = ({ scrollY }: HeroProps) => {
           transition={{ delay: 0.9, duration: 0.8 }}
         >
           <a
-            href="https://github.com/Digital-Defiance/Kliply/releases/tag/v1.0.7"
+            href="https://github.com/Digital-Defiance/Kliply/releases/tag/v1.0.8"
             className="btn btn-primary"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Download v1.0.7
+            Download v1.0.8
           </a>
           <a
             href="https://github.com/Digital-Defiance/Kliply"
@@ -91,6 +92,10 @@ const Hero = ({ scrollY }: HeroProps) => {
             <FaGithub />
             View on GitHub
           </a>
+          <Link to="/guide" className="btn btn-tertiary">
+            <FaBook />
+            User Guide
+          </Link>
         </motion.div>
       </motion.div>
 
