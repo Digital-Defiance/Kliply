@@ -22,7 +22,7 @@ A powerful clipboard manager for macOS, inspired by Windows' Win+V clipboard his
 
 ## Changelog
 
-- **v1.0.8**
+- **v1.0.9**
   - **App Store Ready**: Full sandbox compatibility with Services-based keyboard shortcut
   - Added "Move selected pastes to top" setting (default: true) - selected items move to top of history
   - Services integration for global hotkey in sandboxed environments
@@ -63,7 +63,7 @@ A powerful clipboard manager for macOS, inspired by Windows' Win+V clipboard his
 
 ### Download Release (Recommended)
 
-**[Download Kliply v1.0.8](https://github.com/Digital-Defiance/Kliply/releases/tag/v1.0.8)**
+**[Download Kliply v1.0.9](https://github.com/Digital-Defiance/Kliply/releases/tag/v1.0.9)**
 
 The release includes a signed and notarized DMG for easy installation:
 
