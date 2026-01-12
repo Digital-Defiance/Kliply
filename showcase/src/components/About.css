@@ -193,3 +193,81 @@
     justify-content: center;
   }
 }
+
+/* Version Comparison Styles */
+.version-comparison {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: rgba(139, 92, 246, 0.1);
+  border-left: 4px solid var(--accent-primary);
+  border-radius: 8px;
+}
+
+.version-comparison h4 {
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  color: var(--accent-primary);
+}
+
+.comparison-table {
+  margin-bottom: 1.5rem;
+  background: var(--bg-primary);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border-color, rgba(139, 92, 246, 0.2));
+}
+
+.comparison-row {
+  display: grid;
+  grid-template-columns: 150px 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color, rgba(139, 92, 246, 0.1));
+}
+
+.comparison-row:last-child {
+  border-bottom: none;
+}
+
+.comparison-row.header {
+  background: rgba(139, 92, 246, 0.15);
+  font-weight: 600;
+}
+
+.col-label {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.col-github,
+.col-appstore {
+  color: var(--text-secondary);
+}
+
+.col-github {
+  color: #10b981;
+}
+
+.comparison-note {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .comparison-row {
+    grid-template-columns: 100px 1fr 1fr;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .version-comparison {
+    padding: 1.5rem;
+  }
+
+  .version-comparison h4 {
+    font-size: 1.1rem;
+  }
+}

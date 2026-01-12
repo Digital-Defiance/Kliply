@@ -27,7 +27,7 @@ const features: Feature[] = [
     title: "Global Hotkey Access",
     icon: "🔥",
     description:
-      "Instant access to your clipboard history with Cmd+Shift+V from anywhere in macOS. App Store version uses Services integration for sandbox-compatible shortcuts.",
+      "Instant access to your clipboard history from anywhere in macOS. GitHub version uses direct hotkey (Cmd+Shift+V), App Store uses Services integration for sandbox compatibility.",
     tech: [
       "Carbon API",
       "Services Menu",
@@ -36,10 +36,10 @@ const features: Feature[] = [
     ],
     category: "Core",
     highlights: [
-      "System-wide hotkey (Cmd+Shift+V by default)",
+      "GitHub: Direct system-wide hotkey (Cmd+Shift+V)",
+      "App Store: macOS Services with custom shortcuts",
       "Works across all applications",
       "Customizable keyboard shortcut",
-      "App Store: Uses macOS Services for sandbox compatibility",
       "One-time setup in System Settings",
     ],
   },
@@ -146,7 +146,7 @@ const features: Feature[] = [
     title: "Smart Paste",
     icon: "🎯",
     description:
-      "Automatically returns focus to your previous application and pastes the selected content. Optional move-to-top keeps frequently used items easily accessible.",
+      "Full auto-paste in GitHub version—automatically returns focus and pastes selected content. App Store version copies to clipboard for sandbox compatibility.",
     tech: [
       "NSWorkspace",
       "App Tracking",
@@ -155,10 +155,10 @@ const features: Feature[] = [
     ],
     category: "Productivity",
     highlights: [
+      "GitHub: Full auto-paste with instant insertion",
       "Remembers your previous application",
       "Automatically switches focus back",
       "Move selected pastes to top (configurable)",
-      "Updates target when you click elsewhere",
       "App Store: Copies to clipboard for Cmd+V paste",
     ],
   },

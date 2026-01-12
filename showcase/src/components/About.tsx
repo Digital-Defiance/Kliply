@@ -59,6 +59,37 @@ const About = () => {
               available under the MIT License. We believe in empowering the
               entire Mac community.
             </p>
+
+            <div className="version-comparison">
+              <h4>📥 Choose Your Version</h4>
+              <div className="comparison-table">
+                <div className="comparison-row header">
+                  <div className="col-label"></div>
+                  <div className="col-github"><strong>GitHub Version</strong></div>
+                  <div className="col-appstore"><strong>App Store</strong></div>
+                </div>
+                <div className="comparison-row">
+                  <div className="col-label">Auto-Paste</div>
+                  <div className="col-github">✓ Full auto-paste</div>
+                  <div className="col-appstore">Copy to clipboard</div>
+                </div>
+                <div className="comparison-row">
+                  <div className="col-label">Global Hotkey</div>
+                  <div className="col-github">✓ Direct hotkey</div>
+                  <div className="col-appstore">Services menu</div>
+                </div>
+                <div className="comparison-row">
+                  <div className="col-label">Direct Download</div>
+                  <div className="col-github">✓ GitHub Releases</div>
+                  <div className="col-appstore">Mac App Store</div>
+                </div>
+              </div>
+              <p className="comparison-note">
+                Both versions offer the same core clipboard history, search, and privacy features.
+                The GitHub version includes enhanced automation for power users, while the App Store
+                version provides additional sandbox security and system integration.
+              </p>
+            </div>
           </motion.div>
 
           <div className="about-features">
