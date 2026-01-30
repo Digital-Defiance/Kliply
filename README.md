@@ -2,6 +2,8 @@
 
 A powerful clipboard manager for macOS, inspired by Windows' Win+V clipboard history feature.
 
+## Available on the [Apple App Store](https://apps.apple.com/us/app/kliply/id6757326539?mt=12), but a more powerful version is available in [Releases](https://github.com/Digital-Defiance/Kliply/releases).
+
 ![Platform](https://img.shields.io/badge/platform-macOS%2013.0%2B-lightgrey)
 ![Swift](https://img.shields.io/badge/swift-6.2-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
